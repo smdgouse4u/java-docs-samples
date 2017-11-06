@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Google Inc.
+ * Copyright (c) 2017 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may
  * not  use this file except in compliance with the License. You may obtain a
@@ -17,11 +17,8 @@
 package com.example.echo;
 
 import com.google.api.server.spi.auth.EspAuthenticator;
-import com.google.api.server.spi.auth.common.User;
 import com.google.api.server.spi.config.AnnotationBoolean;
 import com.google.api.server.spi.config.Api;
-import com.google.api.server.spi.config.ApiIssuer;
-import com.google.api.server.spi.config.ApiIssuerAudience;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.config.Named;
@@ -41,17 +38,6 @@ import com.google.api.server.spi.response.UnauthorizedException;
         ownerName = "echo.example.com",
         packagePath = ""
     ),
-    // [START_EXCLUDE]
-    issuers = {
-        @ApiIssuer(
-            name = "firebase",
-            issuer = "https://securetoken.google.com/YOUR-PROJECT-ID",
-            jwksUri =
-                "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system"
-                    + ".gserviceaccount.com"
-        )
-    }
-// [END_EXCLUDE]
 )
 // [END echo_api_annotation]
 
@@ -122,64 +108,4 @@ public class Echo {
     return message;
   }
 
-  /**
-   * Gets the authenticated user's email. If the user is not authenticated, this will return an HTTP
-   * 401.
-   *
-   * <p>Note that name is not specified. This will default to "{class name}.{method name}". For
-   * example, the default is "echo.getUserEmail".
-   *
-   * <p>Note that httpMethod is not required here. Without httpMethod, this will default to GET due
-   * to the API method name. httpMethod is added here for example purposes.
-   */
-  // [START google_id_token_auth]
-  @ApiMethod(
-      httpMethod = ApiMethod.HttpMethod.GET,
-      authenticators = {EspAuthenticator.class},
-      audiences = {"YOUR_OAUTH_CLIENT_ID"},
-      clientIds = {"YOUR_OAUTH_CLIENT_ID"}
-  )
-  public Email getUserEmail(User user) throws UnauthorizedException {
-    if (user == null) {
-      throw new UnauthorizedException("Invalid credentials");
-    }
-
-    Email response = new Email();
-    response.setEmail(user.getEmail());
-    return response;
-  }
-  // [END google_id_token_auth]
-
-  /**
-   * Gets the authenticated user's email. If the user is not authenticated, this will return an HTTP
-   * 401.
-   *
-   * <p>Note that name is not specified. This will default to "{class name}.{method name}". For
-   * example, the default is "echo.getUserEmail".
-   *
-   * <p>Note that httpMethod is not required here. Without httpMethod, this will default to GET due
-   * to the API method name. httpMethod is added here for example purposes.
-   */
-  // [START firebase_auth]
-  @ApiMethod(
-      path = "firebase_user",
-      httpMethod = ApiMethod.HttpMethod.GET,
-      authenticators = {EspAuthenticator.class},
-      issuerAudiences = {
-          @ApiIssuerAudience(
-              name = "firebase",
-              audiences = {"YOUR-PROJECT-ID"}
-          )
-      }
-  )
-  public Email getUserEmailFirebase(User user) throws UnauthorizedException {
-    if (user == null) {
-      throw new UnauthorizedException("Invalid credentials");
-    }
-
-    Email response = new Email();
-    response.setEmail(user.getEmail());
-    return response;
-  }
-  // [END firebase_auth]
 }
