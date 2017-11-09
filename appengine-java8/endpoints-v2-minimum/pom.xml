@@ -63,9 +63,9 @@
     </dependencies>
     <!-- [END pom_dependencies] -->
 
+    <!-- [START pom_build] -->
     <build>
         <!-- for hot reload of the web application-->
-        <!-- [START pom_build] -->
         <outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</outputDirectory>
         <plugins>
             <plugin>
@@ -99,7 +99,10 @@
                     <hostname>YOUR-PROJECT-ID.appspot.com</hostname>
                 </configuration>
             </plugin>
-        <!-- [END pom_build] -->
+            <!--
+                 The versions-maven-plugin is used for dependency updates and
+                 is not required.
+            -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
@@ -116,5 +119,6 @@
             </plugin>
         </plugins>
     </build>
+    <!-- [END pom_build] -->
 </project>
 <!-- [END pom] -->
