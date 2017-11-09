@@ -16,7 +16,6 @@
 
 package com.example.echo;
 
-import com.google.api.server.spi.auth.EspAuthenticator;
 import com.google.api.server.spi.config.AnnotationBoolean;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
@@ -37,7 +36,7 @@ import com.google.api.server.spi.response.UnauthorizedException;
         ownerDomain = "echo.example.com",
         ownerName = "echo.example.com",
         packagePath = ""
-    ),
+    )
 )
 // [END echo_api_annotation]
 
